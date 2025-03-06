@@ -21,23 +21,32 @@
   <script src="js/footer.js"></script>
 
   <script>
+    // 1) Sprawdź token
     const token = localStorage.getItem("spotify_token");
+    console.log(">>> [DEBUG] Wczytany token:", token);
+
     if (!token) {
-      // jeśli nie ma tokena – cofamy do logowania
+      console.log(">>> [DEBUG] Brak tokena. Przekierowanie do logowania...");
       window.location = "spotify_login.html";
     }
 
     // Obsługa wylogowania (kasujemy token w localStorage)
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('spotify_token');
+      console.log(">>> [DEBUG] Wylogowano. Przekierowanie do spotify_login.html");
       window.location = "spotify_login.html";
     });
 
+    // 2) Funkcja do pobrania playlisty
     async function fetchTop50Poland() {
-      // np. ID playlisty "Spotify – Top 50 - Polska"
-      // Sprawdź w dokumentacji lub w samej aplikacji Spotify
+      // Sprawdź aktualne ID playlisty
+      // Przykładowe ID: "37i9dQZEVXbMDoHDwVN2tF" (Top 50 Polska – ale sprawdź w Spotify)
+      // "3cEYpjA9oz9GiPac4AsH4n" to tylko przykład z dokumentacji. Lepiej użyć prawdziwego ID, 
+      // np. wziętego z linku "Udostępnij -> Kopiuj link do playlisty".
       const playlistId = "3cEYpjA9oz9GiPac4AsH4n";
       const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}`;
+
+      console.log(">>> [DEBUG] fetchTop50Poland() - endpoint:", endpoint);
 
       const resp = await fetch(endpoint, {
         headers: {
@@ -46,6 +55,7 @@
       });
 
       if (!resp.ok) {
+        console.log(">>> [DEBUG] Otrzymano status:", resp.status);
         if (resp.status === 401) {
           // Token wygasł lub jest nieprawidłowy -> wyloguj
           localStorage.removeItem('spotify_token');
@@ -54,18 +64,28 @@
         throw new Error(`Błąd Spotify API: ${resp.status}`);
       }
 
-      return await resp.json();
+      // Zwracamy całą zawartość playlisty
+      const data = await resp.json();
+      console.log(">>> [DEBUG] Odpowiedź Spotify - surowe data:", data);
+      return data;
     }
 
+    // 3) Wyświetlamy playlistę w #tracks-container
     async function showTop50() {
       try {
         const data = await fetchTop50Poland();
 
+        // data to obiekt playlisty
+        // Utwory znajdują się w data.tracks.items
+        const items = data.tracks ? data.tracks.items : [];
+        console.log(">>> [DEBUG] items:", items);
+
         const container = document.getElementById("tracks-container");
         container.innerHTML = ""; // czyścimy placeholder
 
-        data.items.forEach(item => {
+        items.forEach(item => {
           const track = item.track;
+          // Zdarza się, że item może być null
           if (!track) return;
 
           const div = document.createElement("div");
