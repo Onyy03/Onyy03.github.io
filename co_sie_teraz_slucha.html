@@ -2,33 +2,33 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Co się Teraz Słucha? - Test GET Toplists</title>
+  <title>Co się Teraz Słucha? - Test Featured Playlists</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>Test - Lista Playlist Toplists (PL)</h1>
+  <h1>Test - Lista Featured Playlists (PL)</h1>
   <button id="logoutBtn">Wyloguj</button>
   <pre id="output">Ładowanie danych...</pre>
 
   <script>
-    // Sprawdź, czy mamy token w localStorage
+    // Pobierz token z localStorage
     const token = localStorage.getItem("spotify_token");
     console.log(">>> [DEBUG] Wczytany token:", token);
-
     if (!token) {
-      console.log(">>> [DEBUG] Brak tokena, przekierowanie do logowania...");
+      console.log(">>> [DEBUG] Brak tokena – przekierowanie do logowania.");
       window.location = "spotify_login.html";
     }
 
-    // Obsługa wylogowania – usuwa token i przekierowuje do strony logowania
-    document.getElementById('logoutBtn').addEventListener('click', () => {
+    // Obsługa wylogowania
+    document.getElementById("logoutBtn").addEventListener("click", () => {
       localStorage.removeItem("spotify_token");
       window.location = "spotify_login.html";
     });
 
-    // Funkcja wykonująca zapytanie GET do endpointu toplists dla Polski
-    async function checkToplists() {
-      const endpoint = "https://api.spotify.com/v1/browse/categories/toplists/playlists?country=PL";
+    // Funkcja pobierająca Featured Playlists dla Polski
+    async function checkFeaturedPlaylists() {
+      // Używamy endpointu Featured Playlists z parametrem country=PL
+      const endpoint = "https://api.spotify.com/v1/browse/featured-playlists?country=PL";
       console.log(">>> [DEBUG] Wywoływany endpoint:", endpoint);
 
       try {
@@ -39,6 +39,7 @@
         });
 
         console.log(">>> [DEBUG] Otrzymano status:", resp.status);
+
         if (!resp.ok) {
           throw new Error(`Błąd Spotify API: ${resp.status}`);
         }
@@ -46,7 +47,7 @@
         const data = await resp.json();
         console.log(">>> [DEBUG] Odpowiedź z API:", data);
 
-        // Wyświetl wynik w elemencie <pre id="output">, sformatowany z wcięciami
+        // Wyświetlamy sformatowany JSON w elemencie <pre>
         document.getElementById("output").textContent = JSON.stringify(data, null, 2);
       } catch (error) {
         console.error(">>> [DEBUG] Błąd podczas fetcha:", error);
@@ -54,8 +55,8 @@
       }
     }
 
-    // Wywołaj funkcję, żeby pobrać i wyświetlić dane
-    checkToplists();
+    // Wywołujemy funkcję
+    checkFeaturedPlaylists();
   </script>
 </body>
 </html>
