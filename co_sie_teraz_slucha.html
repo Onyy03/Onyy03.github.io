@@ -2,61 +2,99 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Co się Teraz Słucha? - Test Featured Playlists</title>
+  <title>Co się Teraz Słucha? - Fetch i Button</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>Test - Lista Featured Playlists (PL)</h1>
+  <h1>Co się Teraz Słucha? - Test Fetch Playlisty</h1>
   <button id="logoutBtn">Wyloguj</button>
-  <pre id="output">Ładowanie danych...</pre>
+  <button id="showTracksBtn">Pokaż Utwory</button>
+  <div id="tracks-container">
+    <p>Playlista jeszcze nie załadowana.</p>
+  </div>
 
   <script>
-    // Pobierz token z localStorage
+    // Sprawdzenie, czy mamy token
     const token = localStorage.getItem("spotify_token");
     console.log(">>> [DEBUG] Wczytany token:", token);
     if (!token) {
-      console.log(">>> [DEBUG] Brak tokena – przekierowanie do logowania.");
       window.location = "spotify_login.html";
     }
+    
+    // Globalna tablica na utwory
+    let tracksArray = [];
 
+    // Funkcja fetchująca playlistę z Spotify
+    async function fetchPlaylist() {
+      // Używamy przykładowej playlisty "Today's Top Hits"
+      const playlistId = "37i9dQZF1DXcBWIGoYBM5M";
+      const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}`;
+      console.log(">>> [DEBUG] Fetching playlist z endpoint:", endpoint);
+      
+      try {
+        const response = await fetch(endpoint, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        console.log(">>> [DEBUG] Otrzymano status:", response.status);
+        if (!response.ok) {
+          throw new Error(`Błąd Spotify API: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(">>> [DEBUG] Odpowiedź z API:", data);
+        
+        // Sprawdzamy, czy w odpowiedzi mamy tablicę utworów (tracks.items)
+        if (data && data.tracks && Array.isArray(data.tracks.items)) {
+          tracksArray = data.tracks.items;
+          console.log(">>> [DEBUG] tracksArray ustawiona, długość:", tracksArray.length);
+        } else {
+          console.error(">>> [DEBUG] Brak tracks.items w odpowiedzi API.");
+        }
+      } catch (error) {
+        console.error(">>> [DEBUG] Błąd podczas fetcha playlisty:", error);
+      }
+    }
+    
+    // Funkcja, która wyświetla utwory zapisane w tracksArray
+    function displayTracks() {
+      const container = document.getElementById("tracks-container");
+      if (tracksArray.length === 0) {
+        container.innerHTML = "<p>Brak danych utworów do wyświetlenia.</p>";
+        return;
+      }
+      
+      // Mapujemy po tablicy i tworzymy HTML dla każdego utworu
+      const htmlTracks = tracksArray.map((item, index) => {
+        const track = item.track;
+        if (!track) return "";
+        return `
+          <div class="track-item">
+            <h3>${index + 1}. ${track.name}</h3>
+            <p>Artyści: ${track.artists.map(artist => artist.name).join(", ")}</p>
+            <p>Album: ${track.album.name}</p>
+          </div>
+        `;
+      }).join("");
+      
+      container.innerHTML = htmlTracks;
+    }
+    
+    // Na document ready wykonujemy fetch playlisty
+    window.addEventListener("DOMContentLoaded", () => {
+      console.log(">>> [DEBUG] Document loaded, rozpoczęcie fetcha playlisty.");
+      fetchPlaylist();
+      
+      // Dodajemy event listener do przycisku "Pokaż Utwory"
+      const showTracksBtn = document.getElementById("showTracksBtn");
+      showTracksBtn.addEventListener("click", displayTracks);
+    });
+    
     // Obsługa wylogowania
     document.getElementById("logoutBtn").addEventListener("click", () => {
       localStorage.removeItem("spotify_token");
       window.location = "spotify_login.html";
     });
-
-    // Funkcja pobierająca Featured Playlists dla Polski
-    async function checkFeaturedPlaylists() {
-      // Używamy endpointu Featured Playlists z parametrem country=PL
-      const endpoint = "https://api.spotify.com/v1/browse/featured-playlists?country=PL";
-      console.log(">>> [DEBUG] Wywoływany endpoint:", endpoint);
-
-      try {
-        const resp = await fetch(endpoint, {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        });
-
-        console.log(">>> [DEBUG] Otrzymano status:", resp.status);
-
-        if (!resp.ok) {
-          throw new Error(`Błąd Spotify API: ${resp.status}`);
-        }
-
-        const data = await resp.json();
-        console.log(">>> [DEBUG] Odpowiedź z API:", data);
-
-        // Wyświetlamy sformatowany JSON w elemencie <pre>
-        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
-      } catch (error) {
-        console.error(">>> [DEBUG] Błąd podczas fetcha:", error);
-        document.getElementById("output").textContent = "Błąd: " + error.message;
-      }
-    }
-
-    // Wywołujemy funkcję
-    checkFeaturedPlaylists();
   </script>
 </body>
 </html>
