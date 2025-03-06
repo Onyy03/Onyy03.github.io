@@ -5,15 +5,15 @@
   <title>Callback - Spotify</title>
 </head>
 <body>
-  <h1>Przetwarzanie tokenu...</h1>
+  <h1>Przetwarzanie tokenu z Spotify...</h1>
 
   <script>
     function getAccessTokenFromUrl() {
-      // Adres jest np. callback.html#access_token=xxx&token_type=Bearer&expires_in=3600
+      // URL jest np. .../callback.html#access_token=xxx&token_type=Bearer&expires_in=3600
       const hash = window.location.hash; 
       if (hash) {
-        const params = new URLSearchParams(hash.substring(1)); 
-        // usuwamy '#' i parsujemy klucze
+        // Usuwamy '#' i parsujemy parametry
+        const params = new URLSearchParams(hash.substring(1));
         return {
           accessToken: params.get('access_token'),
           tokenType: params.get('token_type'),
@@ -25,15 +25,16 @@
 
     const tokenObj = getAccessTokenFromUrl();
     if (tokenObj && tokenObj.accessToken) {
-      // Zapisz token gdzieś (localStorage, sessionStorage, itp.)
+      // Zapisz token np. w localStorage
       localStorage.setItem("spotify_token", tokenObj.accessToken);
 
-      // Możesz też zapisać expiresIn itp. i odliczać, kiedy wygasa.
+      console.log(">>> [DEBUG] Otrzymałem token:", tokenObj.accessToken);
+      console.log(">>> [DEBUG] Wygasa za (sek):", tokenObj.expiresIn);
 
-      // Przekieruj dalej, np. do "co_sie_teraz_slucha.html"
+      // Przekieruj do głównej podstrony np. co_sie_teraz_slucha.html
       window.location = "co_sie_teraz_slucha.html";
     } else {
-      console.error("Brak tokenu w URL, logowanie nieudane?");
+      console.error("Brak tokenu w URL – logowanie nieudane?");
     }
   </script>
 </body>

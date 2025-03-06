@@ -3,96 +3,95 @@
 <head>
   <meta charset="UTF-8" />
   <title>Co się Teraz Słucha?</title>
-  <link rel="stylesheet" href="css/style.css">
+  <!-- Tutaj możesz podpiąć swoje style CSS -->
 </head>
 <body>
-
-  <div id="menu-container"></div>
+  <!-- Tutaj możesz wczytać swoje menu np. przez fetch/menu.js, jeśli chcesz -->
   <h1>Co się Teraz Słucha?</h1>
 
-  <p><button id="logoutBtn">Wyloguj</button></p>
+  <p>
+    <button id="logoutBtn">Wyloguj</button>
+  </p>
 
-  <div id="tracks-container">Ładowanie playlisty Top 50...</div>
+  <div id="tracks-container">
+    <p>Ładowanie playlisty Top 50...</p>
+  </div>
 
-  <div id="footer-container"></div>
-
-  <script src="js/script.js"></script>
-  <script src="js/menu.js"></script>
-  <script src="js/footer.js"></script>
+  <!-- Możesz wczytać tu swoją stopkę, np. fetch/footer.js -->
 
   <script>
+    // 1. Sprawdź, czy mamy token
     const token = localStorage.getItem("spotify_token");
     console.log(">>> [DEBUG] token =", token);
 
     if (!token) {
-      console.log(">>> [DEBUG] Brak tokena, wracam do ekranu logowania...");
+      console.log("Brak tokena w localStorage – przekierowanie do logowania");
       window.location = "spotify_login.html";
     }
 
+    // 2. Obsługa wylogowania
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('spotify_token');
-      console.log(">>> [DEBUG] Wylogowanie – usunięto token z localStorage.");
       window.location = "spotify_login.html";
     });
 
+    // 3. Funkcja pobierająca playlistę
     async function fetchTop50Poland() {
-      // Wstaw poprawne ID playlisty
-      // Np. "37i9dQZEVXbMDoHDwVN2tF" (Poland Top 50)
+      // ID polskiej playlisty (aktualny, wg stanu na marzec 2023) 
+      // Czasem lepiej wziąć '37i9dQZF1DXcBWIGoYBM5M' – "Today's Top Hits"
+      // lub "37i9dQZEVXbMDoHDwVN2tF" – inny polski top, bo 37i9dQZEVXbN6itCcaL3Tt nieraz daje 404
       const playlistId = "37i9dQZEVXbMDoHDwVN2tF";
       const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}`;
 
-      console.log(">>> [DEBUG] fetchTop50Poland – endpoint:", endpoint);
+      console.log(">>> [DEBUG] fetchTop50Poland() - endpoint:", endpoint);
 
       const resp = await fetch(endpoint, {
         headers: {
-          Authorization: `Bearer ${token}`
+          "Authorization": `Bearer ${token}`
         }
       });
 
-      console.log(">>> [DEBUG] Odpowiedź status:", resp.status);
+      console.log(">>> [DEBUG] Otrzymano status:", resp.status);
 
       if (!resp.ok) {
         if (resp.status === 401) {
-          // Token niepoprawny lub wygasł – wyloguj
+          // Token wygasł lub jest nieprawidłowy -> wyloguj
           localStorage.removeItem('spotify_token');
-          console.log(">>> [DEBUG] Token niepoprawny lub wygasł. Redirect -> spotify_login.html");
+          console.log(">>> [DEBUG] 401 – wylogowanie");
           window.location = "spotify_login.html";
         }
         throw new Error(`Błąd Spotify API: ${resp.status}`);
       }
 
       const data = await resp.json();
-      console.log(">>> [DEBUG] Zwrotka z API:", data);
-
-      return data; // tutaj powinniśmy mieć obiekt, w którym jest 'tracks'
+      console.log(">>> [DEBUG] Odpowiedź Spotify – data:", data);
+      return data; 
     }
 
+    // 4. Wyświetlenie playlisty
     async function showTop50() {
       try {
         const data = await fetchTop50Poland();
-        const container = document.getElementById("tracks-container");
-        container.innerHTML = "";
 
-        // Bezpieczne pobranie tablicy – jeśli czegoś brak, to i tak dostaniesz pustą
+        // W polu data.tracks.items masz tablicę elementów 
         const items = data?.tracks?.items ?? [];
 
-        console.log(">>> [DEBUG] Liczba utworów w playlistTr: ", items.length);
+        const container = document.getElementById("tracks-container");
+        container.innerHTML = ""; // czyścimy placeholder
 
-        items.forEach((item, i) => {
-          // item.track zawiera szczegóły utworu
+        items.forEach((item, idx) => {
           const track = item.track;
           if (!track) return;
 
           const div = document.createElement("div");
           div.classList.add("track-item");
           div.innerHTML = `
-            <h3>#${i + 1} ${track.name}</h3>
+            <h3>#${idx + 1} ${track.name}</h3>
             <p>Artyści: ${track.artists.map(a => a.name).join(", ")}</p>
             <p>Album: ${track.album.name}</p>
           `;
           container.appendChild(div);
         });
-
       } catch (err) {
         console.error("Błąd pobierania playlisty:", err);
       }
