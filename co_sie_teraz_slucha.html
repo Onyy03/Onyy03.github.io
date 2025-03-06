@@ -2,95 +2,95 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Co się Teraz Słucha? - Fetch i Button</title>
+  <title>Co się Teraz Słucha? - Test Featured Playlists</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>Co się Teraz Słucha? - Test Fetch Playlisty</h1>
+  <h1>Co się Teraz Słucha? - Test Featured Playlists (PL)</h1>
   <button id="logoutBtn">Wyloguj</button>
-  <button id="showTracksBtn">Pokaż Utwory</button>
-  <div id="tracks-container">
+  <button id="showPlaylistsBtn">Pokaż Playlisty</button>
+  <div id="playlists-container">
     <p>Playlista jeszcze nie załadowana.</p>
   </div>
 
   <script>
-    // Sprawdzenie, czy mamy token
+    // Sprawdzenie tokena
     const token = localStorage.getItem("spotify_token");
     console.log(">>> [DEBUG] Wczytany token:", token);
     if (!token) {
       window.location = "spotify_login.html";
     }
     
-    // Globalna tablica na utwory
-    let tracksArray = [];
+    // Globalna tablica na playlisty
+    let playlistsArray = [];
 
-    // Funkcja fetchująca playlistę z Spotify
-    async function fetchPlaylist() {
-      // Używamy przykładowej playlisty "Today's Top Hits"
-      const playlistId = "37i9dQZF1DXcBWIGoYBM5M";
-      const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}`;
-      console.log(">>> [DEBUG] Fetching playlist z endpoint:", endpoint);
+    // Funkcja fetchująca playlisty (endpoint: featured-playlists)
+    async function fetchFeaturedPlaylists() {
+      // Używamy endpointu Featured Playlists z parametrem country=PL
+      const endpoint = "https://api.spotify.com/v1/browse/featured-playlists?country=PL";
+      console.log(">>> [DEBUG] Wywoływany endpoint:", endpoint);
       
       try {
-        const response = await fetch(endpoint, {
+        const resp = await fetch(endpoint, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
         });
-        console.log(">>> [DEBUG] Otrzymano status:", response.status);
-        if (!response.ok) {
-          throw new Error(`Błąd Spotify API: ${response.status}`);
+        console.log(">>> [DEBUG] Otrzymano status:", resp.status);
+        
+        if (!resp.ok) {
+          // Dla debugowania wypisujemy pełną odpowiedź tekstową
+          const errText = await resp.text();
+          console.error(">>> [DEBUG] Response text:", errText);
+          throw new Error(`Błąd Spotify API: ${resp.status}`);
         }
-        const data = await response.json();
+        
+        const data = await resp.json();
         console.log(">>> [DEBUG] Odpowiedź z API:", data);
         
-        // Sprawdzamy, czy w odpowiedzi mamy tablicę utworów (tracks.items)
-        if (data && data.tracks && Array.isArray(data.tracks.items)) {
-          tracksArray = data.tracks.items;
-          console.log(">>> [DEBUG] tracksArray ustawiona, długość:", tracksArray.length);
+        // Sprawdzamy, czy otrzymaliśmy obiekt z playlists.items
+        if (data && data.playlists && Array.isArray(data.playlists.items)) {
+          playlistsArray = data.playlists.items;
+          console.log(">>> [DEBUG] playlistsArray ustawiona, długość:", playlistsArray.length);
         } else {
-          console.error(">>> [DEBUG] Brak tracks.items w odpowiedzi API.");
+          console.error(">>> [DEBUG] Brak playlists.items w odpowiedzi API.");
         }
       } catch (error) {
-        console.error(">>> [DEBUG] Błąd podczas fetcha playlisty:", error);
+        console.error(">>> [DEBUG] Błąd podczas fetcha featured playlists:", error);
       }
     }
     
-    // Funkcja, która wyświetla utwory zapisane w tracksArray
-    function displayTracks() {
-      const container = document.getElementById("tracks-container");
-      if (tracksArray.length === 0) {
-        container.innerHTML = "<p>Brak danych utworów do wyświetlenia.</p>";
+    // Funkcja wyświetlająca playlisty z globalnej tablicy
+    function displayPlaylists() {
+      const container = document.getElementById("playlists-container");
+      if (playlistsArray.length === 0) {
+        container.innerHTML = "<p>Brak danych do wyświetlenia.</p>";
         return;
       }
       
-      // Mapujemy po tablicy i tworzymy HTML dla każdego utworu
-      const htmlTracks = tracksArray.map((item, index) => {
-        const track = item.track;
-        if (!track) return "";
+      const html = playlistsArray.map((playlist, idx) => {
         return `
-          <div class="track-item">
-            <h3>${index + 1}. ${track.name}</h3>
-            <p>Artyści: ${track.artists.map(artist => artist.name).join(", ")}</p>
-            <p>Album: ${track.album.name}</p>
+          <div class="playlist-item">
+            <h3>${idx + 1}. ${playlist.name}</h3>
+            <p>ID: ${playlist.id}</p>
+            <p>Opis: ${playlist.description || "Brak opisu"}</p>
           </div>
         `;
       }).join("");
       
-      container.innerHTML = htmlTracks;
+      container.innerHTML = html;
     }
     
-    // Na document ready wykonujemy fetch playlisty
+    // Po załadowaniu dokumentu wykonaj fetch playlisty
     window.addEventListener("DOMContentLoaded", () => {
-      console.log(">>> [DEBUG] Document loaded, rozpoczęcie fetcha playlisty.");
-      fetchPlaylist();
+      console.log(">>> [DEBUG] Document loaded, fetching featured playlists.");
+      fetchFeaturedPlaylists();
       
-      // Dodajemy event listener do przycisku "Pokaż Utwory"
-      const showTracksBtn = document.getElementById("showTracksBtn");
-      showTracksBtn.addEventListener("click", displayTracks);
+      // Po kliknięciu przycisku pokaż playlisty – wyświetlamy dane z globalnej tablicy
+      document.getElementById("showPlaylistsBtn").addEventListener("click", displayPlaylists);
     });
     
-    // Obsługa wylogowania
+    // Obsługa przycisku wylogowania
     document.getElementById("logoutBtn").addEventListener("click", () => {
       localStorage.removeItem("spotify_token");
       window.location = "spotify_login.html";
