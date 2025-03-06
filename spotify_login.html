@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login przez Spotify</title>
+</head>
+<body>
+  <h1>Logowanie do Spotify</h1>
+  <button id="login-btn">Zaloguj się Spotify</button>
+
+  <script>
+    // Wstaw tu swoje ID aplikacji
+    const CLIENT_ID = "TWOJ_CLIENT_ID";
+    // Dokładnie taki sam adres, jaki dodałeś w Spotify Developer Dashboard
+    const REDIRECT_URI = "http://localhost:5500/callback.html";
+
+    // Jakich uprawnień potrzebujesz:
+    // - np. playlist-read-private jeśli chcesz czytać playlisty usera
+    // - user-read-private, user-read-email, itd.
+    // Do publicznych playlist starczy sporo mniejszy zakres, ale
+    // nawet do "publicznych" zasobów Spotify często i tak wymagają tokena.
+    const SCOPES = [
+      "playlist-read-private",
+      "user-read-private",
+      "user-read-email"
+    ];
+
+    document.getElementById("login-btn").addEventListener("click", () => {
+      // Tworzymy URL do autoryzacji
+      const authEndpoint = "https://accounts.spotify.com/authorize";
+      const responseType = "token"; // Implicit Grant
+      // Sklejamy adres
+      const authUrl =
+        authEndpoint + 
+        `?client_id=${CLIENT_ID}` +
+        `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
+        `&scope=${encodeURIComponent(SCOPES.join(" "))}` +
+        `&response_type=${responseType}` +
+        `&show_dialog=true`; // wymuś okno logowania nawet gdy user jest zalogowany
+
+      // Przekierowanie do Spotify
+      window.location = authUrl;
+    });
+  </script>
+</body>
+</html>
