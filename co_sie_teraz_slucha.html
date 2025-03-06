@@ -21,81 +21,78 @@
   <script src="js/footer.js"></script>
 
   <script>
-    // 1) Sprawdź token
     const token = localStorage.getItem("spotify_token");
-    console.log(">>> [DEBUG] Wczytany token:", token);
+    console.log(">>> [DEBUG] token =", token);
 
     if (!token) {
-      console.log(">>> [DEBUG] Brak tokena. Przekierowanie do logowania...");
+      console.log(">>> [DEBUG] Brak tokena, wracam do ekranu logowania...");
       window.location = "spotify_login.html";
     }
 
-    // Obsługa wylogowania (kasujemy token w localStorage)
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('spotify_token');
-      console.log(">>> [DEBUG] Wylogowano. Przekierowanie do spotify_login.html");
+      console.log(">>> [DEBUG] Wylogowanie – usunięto token z localStorage.");
       window.location = "spotify_login.html";
     });
 
-    // 2) Funkcja do pobrania playlisty
     async function fetchTop50Poland() {
-      // Sprawdź aktualne ID playlisty
-      // Przykładowe ID: "37i9dQZEVXbMDoHDwVN2tF" (Top 50 Polska – ale sprawdź w Spotify)
-      // "3cEYpjA9oz9GiPac4AsH4n" to tylko przykład z dokumentacji. Lepiej użyć prawdziwego ID, 
-      // np. wziętego z linku "Udostępnij -> Kopiuj link do playlisty".
-      const playlistId = "37i9dQZEVXbN6itCcaL3Tt";
+      // Wstaw poprawne ID playlisty
+      // Np. "37i9dQZEVXbMDoHDwVN2tF" (Poland Top 50)
+      const playlistId = "37i9dQZEVXbMDoHDwVN2tF";
       const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}`;
 
-      console.log(">>> [DEBUG] fetchTop50Poland() - endpoint:", endpoint);
+      console.log(">>> [DEBUG] fetchTop50Poland – endpoint:", endpoint);
 
       const resp = await fetch(endpoint, {
         headers: {
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       });
 
+      console.log(">>> [DEBUG] Odpowiedź status:", resp.status);
+
       if (!resp.ok) {
-        console.log(">>> [DEBUG] Otrzymano status:", resp.status);
         if (resp.status === 401) {
-          // Token wygasł lub jest nieprawidłowy -> wyloguj
+          // Token niepoprawny lub wygasł – wyloguj
           localStorage.removeItem('spotify_token');
+          console.log(">>> [DEBUG] Token niepoprawny lub wygasł. Redirect -> spotify_login.html");
           window.location = "spotify_login.html";
         }
         throw new Error(`Błąd Spotify API: ${resp.status}`);
       }
 
-      // Zwracamy całą zawartość playlisty
       const data = await resp.json();
-      console.log(">>> [DEBUG] Odpowiedź Spotify - surowe data:", data);
-      return data;
+      console.log(">>> [DEBUG] Zwrotka z API:", data);
+
+      return data; // tutaj powinniśmy mieć obiekt, w którym jest 'tracks'
     }
 
-    // 3) Wyświetlamy playlistę w #tracks-container
     async function showTop50() {
       try {
         const data = await fetchTop50Poland();
-
-        // data to obiekt playlisty
-        // Utwory znajdują się w data.tracks.items
-        const items = data.tracks ? data.tracks.items : [];
-        console.log(">>> [DEBUG] items:", items);
-
         const container = document.getElementById("tracks-container");
-        container.innerHTML = ""; // czyścimy placeholder
+        container.innerHTML = "";
 
-        items.forEach(item => {
+        // Bezpieczne pobranie tablicy – jeśli czegoś brak, to i tak dostaniesz pustą
+        const items = data?.tracks?.items ?? [];
+
+        console.log(">>> [DEBUG] Liczba utworów w playlistTr: ", items.length);
+
+        items.forEach((item, i) => {
+          // item.track zawiera szczegóły utworu
           const track = item.track;
-          // Zdarza się, że item może być null
           if (!track) return;
 
           const div = document.createElement("div");
           div.classList.add("track-item");
           div.innerHTML = `
-            <p><strong>${track.name}</strong> - ${track.artists.map(a => a.name).join(", ")}</p>
+            <h3>#${i + 1} ${track.name}</h3>
+            <p>Artyści: ${track.artists.map(a => a.name).join(", ")}</p>
             <p>Album: ${track.album.name}</p>
           `;
           container.appendChild(div);
         });
+
       } catch (err) {
         console.error("Błąd pobierania playlisty:", err);
       }
