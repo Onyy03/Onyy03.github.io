@@ -1,103 +1,61 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <title>Co się Teraz Słucha?</title>
-  <!-- Tutaj możesz podpiąć swoje style CSS -->
+  <meta charset="UTF-8">
+  <title>Co się Teraz Słucha? - Test GET Toplists</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Tutaj możesz wczytać swoje menu np. przez fetch/menu.js, jeśli chcesz -->
-  <h1>Co się Teraz Słucha?</h1>
-
-  <p>
-    <button id="logoutBtn">Wyloguj</button>
-  </p>
-
-  <div id="tracks-container">
-    <p>Ładowanie playlisty Top 50...</p>
-  </div>
-
-  <!-- Możesz wczytać tu swoją stopkę, np. fetch/footer.js -->
+  <h1>Test - Lista Playlist Toplists (PL)</h1>
+  <button id="logoutBtn">Wyloguj</button>
+  <pre id="output">Ładowanie danych...</pre>
 
   <script>
-    // 1. Sprawdź, czy mamy token
+    // Sprawdź, czy mamy token w localStorage
     const token = localStorage.getItem("spotify_token");
-    console.log(">>> [DEBUG] token =", token);
+    console.log(">>> [DEBUG] Wczytany token:", token);
 
     if (!token) {
-      console.log("Brak tokena w localStorage – przekierowanie do logowania");
+      console.log(">>> [DEBUG] Brak tokena, przekierowanie do logowania...");
       window.location = "spotify_login.html";
     }
 
-    // 2. Obsługa wylogowania
+    // Obsługa wylogowania – usuwa token i przekierowuje do strony logowania
     document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('spotify_token');
+      localStorage.removeItem("spotify_token");
       window.location = "spotify_login.html";
     });
 
-    // 3. Funkcja pobierająca playlistę
-    async function fetchTop50Poland() {
-      // ID polskiej playlisty (aktualny, wg stanu na marzec 2023) 
-      // Czasem lepiej wziąć '37i9dQZF1DXcBWIGoYBM5M' – "Today's Top Hits"
-      // lub "37i9dQZEVXbMDoHDwVN2tF" – inny polski top, bo 37i9dQZEVXbN6itCcaL3Tt nieraz daje 404
-      const playlistId = "37i9dQZEVXbMDoHDwVN2tF";
-      const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}`;
+    // Funkcja wykonująca zapytanie GET do endpointu toplists dla Polski
+    async function checkToplists() {
+      const endpoint = "https://api.spotify.com/v1/browse/categories/toplists/playlists?country=PL";
+      console.log(">>> [DEBUG] Wywoływany endpoint:", endpoint);
 
-      console.log(">>> [DEBUG] fetchTop50Poland() - endpoint:", endpoint);
-
-      const resp = await fetch(endpoint, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
-
-      console.log(">>> [DEBUG] Otrzymano status:", resp.status);
-
-      if (!resp.ok) {
-        if (resp.status === 401) {
-          // Token wygasł lub jest nieprawidłowy -> wyloguj
-          localStorage.removeItem('spotify_token');
-          console.log(">>> [DEBUG] 401 – wylogowanie");
-          window.location = "spotify_login.html";
-        }
-        throw new Error(`Błąd Spotify API: ${resp.status}`);
-      }
-
-      const data = await resp.json();
-      console.log(">>> [DEBUG] Odpowiedź Spotify – data:", data);
-      return data; 
-    }
-
-    // 4. Wyświetlenie playlisty
-    async function showTop50() {
       try {
-        const data = await fetchTop50Poland();
-
-        // W polu data.tracks.items masz tablicę elementów 
-        const items = data?.tracks?.items ?? [];
-
-        const container = document.getElementById("tracks-container");
-        container.innerHTML = ""; // czyścimy placeholder
-
-        items.forEach((item, idx) => {
-          const track = item.track;
-          if (!track) return;
-
-          const div = document.createElement("div");
-          div.classList.add("track-item");
-          div.innerHTML = `
-            <h3>#${idx + 1} ${track.name}</h3>
-            <p>Artyści: ${track.artists.map(a => a.name).join(", ")}</p>
-            <p>Album: ${track.album.name}</p>
-          `;
-          container.appendChild(div);
+        const resp = await fetch(endpoint, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
         });
-      } catch (err) {
-        console.error("Błąd pobierania playlisty:", err);
+
+        console.log(">>> [DEBUG] Otrzymano status:", resp.status);
+        if (!resp.ok) {
+          throw new Error(`Błąd Spotify API: ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        console.log(">>> [DEBUG] Odpowiedź z API:", data);
+
+        // Wyświetl wynik w elemencie <pre id="output">, sformatowany z wcięciami
+        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        console.error(">>> [DEBUG] Błąd podczas fetcha:", error);
+        document.getElementById("output").textContent = "Błąd: " + error.message;
       }
     }
 
-    showTop50();
+    // Wywołaj funkcję, żeby pobrać i wyświetlić dane
+    checkToplists();
   </script>
 </body>
 </html>
