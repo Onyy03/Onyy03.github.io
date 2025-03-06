@@ -1,58 +1,87 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Co się Teraz Słucha?</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
+
   <div id="menu-container"></div>
   <h1>Co się Teraz Słucha?</h1>
 
-  <div id="tracks-container">Ładowanie listy utworów...</div>
+  <p><button id="logoutBtn">Wyloguj</button></p>
+
+  <div id="tracks-container">Ładowanie playlisty Top 50...</div>
 
   <div id="footer-container"></div>
-  
-  <!-- Najpierw globalny script.js/menu.js, jeśli potrzebne do nawigacji -->
+
   <script src="js/script.js"></script>
   <script src="js/menu.js"></script>
-  <!-- Skrypt do obsługi stopki -->
   <script src="js/footer.js"></script>
 
-  <!-- Nasz plik do Spotify API -->
-  <script type="module">
-    import { getTop50Poland } from "./js/spotifyAPI.js";
+  <script>
+    const token = localStorage.getItem("spotify_token");
+    if (!token) {
+      // jeśli nie ma tokena – cofamy do logowania
+      window.location = "spotify_login.html";
+    }
 
-    async function showPlaylist() {
+    // Obsługa wylogowania (kasujemy token w localStorage)
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('spotify_token');
+      window.location = "spotify_login.html";
+    });
+
+    async function fetchTop50Poland() {
+      // np. ID playlisty "Spotify – Top 50 - Polska"
+      // Sprawdź w dokumentacji lub w samej aplikacji Spotify
+      const playlistId = "37i9dQZEVXbN6itCcaL3Tt";
+      const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+
+      const resp = await fetch(endpoint, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (!resp.ok) {
+        if (resp.status === 401) {
+          // Token wygasł lub jest nieprawidłowy -> wyloguj
+          localStorage.removeItem('spotify_token');
+          window.location = "spotify_login.html";
+        }
+        throw new Error(`Błąd Spotify API: ${resp.status}`);
+      }
+
+      return await resp.json();
+    }
+
+    async function showTop50() {
       try {
-        const data = await getTop50Poland();
-        // data.items -> tablica utworów
+        const data = await fetchTop50Poland();
 
-        const container = document.getElementById('tracks-container');
-        container.innerHTML = ""; // Czyścimy loader
+        const container = document.getElementById("tracks-container");
+        container.innerHTML = ""; // czyścimy placeholder
 
         data.items.forEach(item => {
           const track = item.track;
-          if (!track) return; // Czasem może być null, w razie usuniętego utworu
+          if (!track) return;
 
-          // Tworzymy element do wyświetlenia
-          const trackDiv = document.createElement('div');
-          trackDiv.classList.add('track-item');
-
-          trackDiv.innerHTML = `
-            <p><strong>${track.name}</strong> – ${track.artists.map(a => a.name).join(", ")}</p>
+          const div = document.createElement("div");
+          div.classList.add("track-item");
+          div.innerHTML = `
+            <p><strong>${track.name}</strong> - ${track.artists.map(a => a.name).join(", ")}</p>
             <p>Album: ${track.album.name}</p>
           `;
-
-          container.appendChild(trackDiv);
+          container.appendChild(div);
         });
       } catch (err) {
-        console.error(err);
+        console.error("Błąd pobierania playlisty:", err);
       }
     }
 
-    showPlaylist();
+    showTop50();
   </script>
 </body>
 </html>
