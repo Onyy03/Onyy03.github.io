@@ -3,9 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <title>CSTS</title>
 </head>
 <body>
-    siur
+    <div id="menu-container"></div>
+
+    <!-- Najpierw wczytujemy script.js, bo tam jest initMenu() -->
+    <script src="js/script.js"></script>
+    <!-- Potem menu.js, który używa initMenu() -->
+    <script src="js/menu.js"></script>
+
+    <div class="hero-banner">
+        <p class="hero-text-left">Skoro tu trafiłeś, pewnie się zastanawiasz</p>
+        <h1 class="hero-text-center"><span class="zielony">C</span>o <span class="zielony">S</span>ię <span class="zielony">T</span>eraz <span class="zielony">S</span>łucha?</h1>
+        <p class="hero-text-right">Bądź na czasie z muzycznymi trendami</p>
+        <img src="images/hero.png" alt="Hero Image" class="hero-image">
+    </div>
+
+    <div class="info-section">
+        <div class="info-text">
+          <h2>Twój muzyczny przewodnik</h2>
+          <p>
+            Chcesz przeanalizować rynek muzyczny i sprawdzić najnowsze trendy? A może interesują Cię statystyki Twojego konta Spotify – ulubieni artyści, najczęściej słuchane utwory i muzyczne nawyki?
+          </p>
+          <p class="pdwa">CSTS to kompleksowe narzędzie, które pozwoli Ci odkryć świat muzyki na nowo. Analizuj swój profil, śledź trendy i zyskaj szybki dostęp do najważniejszych danych – wszystko w jednym miejscu! </p>
+          <button class="green-button">ZALOGUJ SIĘ</button>
+        </div>
+        <div class="info-image">
+          <!-- Tymczasowy placeholder: logo.png -->
+          <img src="images/logo.png" alt="Placeholder">
+        </div>
+      </div>
+
+
+    
+
+    
+
+    <!-- Sekcja Funkcjonalności -->
+    <div class="features-container">
+        <!-- Nagłówek sekcji -->
+        <div class="features-header">
+            <h2>Odkryj możliwości CSTS</h2>
+            <p>
+                Kiedy zadasz sobie pytanie, jakie piosenki są teraz popularne, kto jest TWOIM ulubionym artystą, 
+                bądź jaki gatunek muzyczny jest ci najbliższy, użyj naszej aplikacji, aby uzyskać wszystkie potrzebne informacje!
+            </p>
+        </div>
+    
+        <!-- Pojedyncza funkcjonalność -->
+        <div class="feature">
+            <div class="feature-content">
+                <div class="feature-text">
+                    <h3>Co się teraz słucha?</h3>
+                    <p>Dowiedz się, czego właśnie słuchają inni! Kliknij, aby zobaczyć dzisiejsze najczęściej odtwarzane utwory.</p>
+                    <button class="service-button">SPRAWDZAM</button>
+                </div>
+            </div>
+            <div class="feature-image">
+                <img src="images/logo.png" alt="Placeholder">
+            </div>
+        </div>
+        
+        
+        <!-- Pojedyncza funkcjonalność -->
+        <div class="feature2">
+            <div class="feature-image2">
+                <img src="images/logo.png" alt="Placeholder">
+            </div>
+            <div class="feature-content2">
+                <div class="feature-text2">
+                    <h3>Jacy artyści są na topie?</h3>
+                    <p>Chcesz przekonać się kto aktualnie jest najpopularniejszym artystą? Wyniki mogą cię zaskoczyć!</p>
+                    <button class="service-button2">SPRAWDZAM</button>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="feature">
+            <div class="feature-content">
+                <div class="feature-text">
+                    <h3>Analiza playlisty</h3>
+                    <p>Odkryj co skrywają twoje playlisty, przekonaj się jakie gatunki w nich dominują.</p>
+                    <button class="service-button">ANALIZA</button>
+                </div>
+            </div>
+            <div class="feature-image">
+                <img src="images/logo.png" alt="Placeholder">
+            </div>
+        </div>
+        
+        <!-- Pojedyncza funkcjonalność -->
+        <div class="feature2">
+            <div class="feature-image2">
+                <img src="images/logo.png" alt="Placeholder">
+            </div>
+            <div class="feature-content2">
+                <div class="feature-text2">
+                    <h3>Twoje statystyki</h3>
+                    <p>Odkryj Twojego prawdziwego ulubionego wykonawcę oraz poznaj piosenkę, która leciała u ciebie na okragło.</p>
+                    <button class="service-button2">SPRAWDZAM</button>
+                </div>
+            </div>
+            
+        </div>
+        
+
+    </div>
+    
+
+
+        
+    <div id="footer-container"></div>
+    <script src="js/footer.js"></script>
 </body>
 </html>

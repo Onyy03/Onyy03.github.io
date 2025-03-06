@@ -1,0 +1,567 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Roboto, sans-serif;
+    background-color: #0D0D0D;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 0 16px; /* Padding for smaller screens */
+    overflow-x: hidden;
+}
+
+.zielony {
+  color: #1ED65F;
+}
+
+/* Kontener na logo, które jest wyśrodkowane, bez fixed */
+.logo-container {
+    text-align: center; /* Centrowanie logo */
+    padding-top: 24px;  /* Dodanie marginesu od góry */
+    position: relative; /* Standardowa pozycja, żeby logo było normalnie na stronie */
+    transition: opacity 0.3s ease;
+}
+
+/* Menu z kontenerem fixed, szerokość 800px, z marginesem 96px od góry */
+.menu-fixed-container {
+    position: fixed;
+    top: 96px;  /* Odległość menu od góry strony */
+    left: 50%;
+    transform: translateX(-50%); /* Wyśrodkowanie menu */
+    width: 100%;
+    max-width: 800px;
+    z-index: 1000; /* Upewniamy się, że menu jest na wierzchu */
+    display: flex;
+    justify-content: center; /* Rozmieszczenie kafelków równomiernie */
+    gap: 16px;
+    padding-bottom: 16px;
+    padding-top: 16px;
+    border-bottom: #4D4D4D 2px solid;
+    background-color: #0D0D0D;
+    transition: top 0.3s ease;
+}
+
+.menu-fixed-container .menu-item {
+    background-color: #4D4D4D;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    padding: 8px;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+    text-decoration: none; /* Usuwamy podkreślenie linku */
+    display: block; /* Zapewnia, że cały obszar jest klikalny */
+}
+
+/* Efekt hover */
+.menu-fixed-container .menu-item:hover {
+    background-color: #262626;
+    color: #1ed65f;
+}
+
+
+/* Zawartość strony */
+.content {
+    margin-top: 100px;
+    padding: 20px;
+    text-align: center;
+}
+
+.large-content {
+    height: 2000px;
+}
+
+/* Hero banner section */
+
+.hero-banner {
+    width: 100%;
+    max-width: 800px;
+    margin: 96px auto;
+  
+    /* Ustawiamy flex container */
+    display: flex;
+    flex-direction: column; /* lub row - w zależności od potrzeb */
+    gap: 16px;       
+    
+}
+
+.hero-text-left {
+    position: static;
+    text-align: left;
+    top: 0;
+    left: 0;
+    font-size: 20px;
+    
+    color: white;
+}
+
+.hero-text-center {
+    font-size: 64px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    text-transform: capitalize;
+    
+}
+
+.hero-text-right {
+    position: static;
+    bottom: 0;
+    right: 0;
+    font-size: 20px;
+    text-align: right;
+    color: white;
+
+}
+
+.hero-image {
+    width: 100%;
+    margin-top: 25px;
+}
+
+
+
+
+/* Sekcja informacyjna pod hero */
+.info-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 100px;  /* Odstęp od hero-bannera */
+  /* Jeśli chcesz zachować tę samą maksymalną szerokość co reszta (800px), możesz dodać: 
+     max-width: 800px; 
+     margin: 150px auto 0 auto;  */
+}
+
+.info-text {
+  width: 45%;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column; /* Ustawia elementy jeden pod drugim */
+  gap: 32px; /* Ustawia odstęp 32px między elementami wewnątrz */
+}
+
+
+.info-text h2 {
+  font-size: 32px;
+  
+}
+
+.info-text p {
+  line-height: 1.4;
+  font-size:18px;
+  
+  
+}
+.pdwa {
+  margin-top: -8px;
+}
+
+.green-button {
+  background-color: #1ED65F;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  font-size: 16px;
+  border-radius: 8px;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-family: roboto, sans-serif;
+  align-self: flex-start;
+  box-shadow: 4px 8px 12px rgba(30, 214, 95, 0.2);
+
+}
+
+.green-button:hover {
+  background-color: #17b851;
+}
+
+.info-image {
+  width: 200px;
+  text-align: center; /* Jeśli chcesz wyśrodkować np. zdjęcie w pionie */
+}
+
+.info-image img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+
+/* Kontener dla całej sekcji z uslugami */
+.features-container {
+  text-align: center;
+  margin-top: 200px;
+  margin-bottom: 200px;
+  max-width: 800px;
+  overflow:hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  
+}
+
+/* Nagłówek sekcji */
+.features-header {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 32px;
+  text-align: left;
+}
+
+.features-header h2 {
+  font-size: 32px;
+  
+  color: #ffffff;
+}
+
+.features-header p {
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 21px;
+}
+
+/* Pojedyncza funkcjonalność */
+.feature {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  
+  overflow: visible;
+}
+
+/* Lewa sekcja */
+.feature-content {
+  width: 506px;
+  height: 222px;
+  background-color: #4d4d4d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  padding: 24px;
+  position: relative;
+  z-index: 1; /* Niższy niż obrazek */
+}
+
+/* Wewnętrzny box na tekst */
+.feature-text {
+  width: 336px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  text-align: left;
+  color: white;
+}
+
+/* Stylowanie tekstu */
+.feature-text h3 {
+  font-size: 24px;
+}
+
+.feature-text p {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+/* Prawa strona - obrazek */
+.feature-image {
+  width: 300px;
+  height: 194px;
+  margin-left: -146px; /* Ujemny margines */
+  z-index: 2; /* Wyższy niż tekst */
+}
+
+/* Zdjęcie */
+.feature-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* Styl przycisku */
+.service-button {
+  background-color: #1ED65F;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  cursor: pointer;
+  display: inline-block;
+  width: 138px; /* Szerokość na sztywno */
+  text-align: center;
+  font-size: 14px;
+  font-family: Roboto, sans-serif;
+  box-shadow: 4px 8px 12px rgba(30, 214, 95, 0.2);
+}
+
+.service-button:hover {
+  background-color: #17b851;
+}
+
+/* Początkowe ukrycie elementów poza ekranem */
+.feature-content {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 1s ease-out, opacity 1s ease-out;
+}
+
+.feature-image {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 1s ease-out, opacity 1s ease-out;
+}
+
+/* Po wejściu w viewport - elementy wracają na miejsce */
+.feature.visible .feature-content {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.feature.visible .feature-image {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.feature-reverse {
+    justify-content: right;
+}
+
+
+
+
+
+/* Nagłówek sekcji */
+.features-header2 {
+  margin-bottom: 50px;
+}
+
+.features-header2 h2 {
+  font-size: 32px;
+  margin-bottom: 16px;
+  color: #ffffff;
+}
+
+.features-header2 p {
+  color: #fff;
+}
+
+/* Pojedyncza funkcjonalność */
+.feature2 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  overflow: visible;
+}
+
+/* Lewa sekcja */
+.feature-content2 {
+  width: 506px;
+  height: 222px;
+  background-color: #4d4d4d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  padding: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Wewnętrzny box na tekst */
+.feature-text2 {
+  width: 336px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  text-align: left;
+  color: white;
+}
+
+/* Stylowanie tekstu */
+.feature-text2 h3 {
+  font-size: 24px;
+}
+
+.feature-text2 p {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+/* Prawa strona - obrazek */
+.feature-image2 {
+  width: 300px;
+  height: 194px;
+  margin-right: -146px; /* Ujemny margines */
+  z-index: 2;
+}
+
+/* Zdjęcie */
+.feature-image2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* Styl przycisku */
+.service-button2 {
+  background-color: #1ED65F;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  cursor: pointer;
+  display: inline-block;
+  width: 138px;
+  text-align: center;
+  font-size: 14px;
+  font-family: Roboto, sans-serif;
+  box-shadow: 4px 8px 12px rgba(30, 214, 95, 0.2);
+  text-shadow: rgba(0,0,0,0.3);
+
+}
+
+.service-button2:hover {
+  background-color: #17b851;
+}
+
+
+
+
+/* Początkowe ukrycie elementów poza ekranem */
+.feature-content2 {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 1s ease-out, opacity 1s ease-out;
+}
+
+.feature-image2 {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 1s ease-out, opacity 1s ease-out;
+}
+
+/* Po wejściu w viewport - elementy wracają na miejsce */
+.feature2.visible .feature-content2 {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.feature2.visible .feature-image2 {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Sekcja stopki */
+
+.site-footer {
+ 
+  
+  width: 100%;
+  max-width: 800px; /* lub inna szerokość, jak wolisz */
+  z-index: 9999;
+  margin-top: 150px;
+  color: #ffffff;
+  font-family: Roboto, sans-serif;
+}
+.site-footer h3 {
+  font-size: 24px;
+  
+}
+/* GÓRNA CZĘŚĆ (footer-top) */
+.footer-top {
+  display: flex;
+  flex-direction: row;  /* jeśli chcesz kolumny obok siebie */
+  justify-content: space-between;
+  background-color: #262626; /* lub inny odcień szarości */
+  padding: 32px 32px 16px 32px;;
+  border-radius: 8px;
+}
+
+/* Pojedyncza kolumna w stopce */
+.footer-col {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.footer-col1 {
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Logo w kolumnie 1 */
+.footer-logo {
+  width: 64px;    /* dostosuj w razie potrzeby */
+  height: 64px;
+  object-fit: cover;
+}
+
+/* Tekst opisowy w kolumnie 1 */
+.footer-description {
+  font-size: 18px;
+}
+
+/* Kolumna 2: lista linków */
+.footer-col ul {
+  list-style: none;
+  padding-left: 0;
+  font-size: 16px;
+  margin-top: -8px;
+}
+.footer-col li {
+  margin: 16px 0;
+}
+.footer-col a {
+  color: #ffffff;
+  text-decoration: none;
+}
+.footer-col a:hover {
+  color: #1ED65F;
+}
+
+/* Kolumna 3: Social Media */
+.social-icons a {
+  margin-right: 16px;
+  color: #ffffff;
+  font-size: 32px;
+  text-decoration: none;
+}
+.social-icons a:hover {
+  color: #1ED65F; /* np. zielony */
+}
+
+/* DOLNA CZĘŚĆ (footer-bottom) */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between; /* 2 paragrafy: lewy i prawy */
+  align-items: center;
+  padding: 24px 0; /* top i bottom = 24px */
+  border-top: 2px solid #4D4D4D; /* biała linia u góry */
+  margin-top: 16px; /* mały odstęp pod .footer-top */
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+.footer-bottom a {
+  color:#1ED65F;
+  text-decoration: none;
+}
+
+

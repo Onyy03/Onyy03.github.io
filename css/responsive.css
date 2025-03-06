@@ -1,0 +1,378 @@
+@media screen and (max-width: 767px) {
+
+    
+  
+    /* --- Reset / podstawowe style w widoku mobilnym --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  
+    ul, li {
+      list-style: none;
+    }
+  
+    a {
+      text-decoration: none;
+      color: white; /* możesz zmienić na inny kolor */
+    }
+  
+    /* --- Mobilne menu off-screen --- */
+    .off-screen-menu {
+      background-color: #4D4D4D;
+      height: 100vh;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      right: -100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      transition: 0.3s ease;
+      z-index: 9998; /* Niższy niż hamburger i nav */
+    }
+  
+    .off-screen-menu.active {
+      right: 0;
+    }
+  
+    .off-screen-menu ul li {
+      margin: 32px 0;
+    }
+  
+    /* --- Pasek nawigacji (nav) mobilny --- */
+    .mobile-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;  /* klucz do pionowego wyśrodkowania */
+      justify-content: space-between;
+      background-color: #262626;  /* przykładowy kolor */
+      padding: 8px 16px;          /* odstęp góra/dół: 8px, boki: 16px */
+      height: 58px;
+      z-index: 9999;
+    }
+  
+    .logo-container img {
+      margin-top: -24px;
+      width: 180px;
+      height: 32px;
+      object-fit:contain;
+      display: block; /* aby logo nie dziedziczyło linii bazowej i lepiej się centrowało */
+    }
+  
+    /* --- Hamburger --- */
+    .ham-menu {
+      width: 32px;
+      height: 32px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .ham-menu span {
+      height: 5px;
+      width: 100%;
+      background-color: #ffffff;
+      border-radius: 25px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: 0.3s ease;
+    }
+  
+    .ham-menu span:nth-child(1) {
+      top: 25%;
+    }
+  
+    .ham-menu span:nth-child(3) {
+      top: 75%;
+    }
+  
+    /* Animacja X */
+    .ham-menu.active span {
+      background-color: #1ED65F;
+    }
+  
+    .ham-menu.active span:nth-child(1) {
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+  
+    .ham-menu.active span:nth-child(2) {
+      opacity: 0;
+    }
+  
+    .ham-menu.active span:nth-child(3) {
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  
+    .no-scroll {
+      overflow-y: hidden;
+      touch-action: none; /* dla pewnych starszych urządzeń */
+    }
+  
+    /* --- Margines górny, by treść nie chowała się pod nav --- */
+    body {
+      margin-top: 56px; /* Równe height paska nawigacji */
+      padding: 0 16px; /* Adjust padding for mniejsze ekrany */
+    }
+  
+    .hero-banner {
+      margin: 80px auto; /* Adjust margin for mniejsze ekrany */
+      gap: 8px; /* Odstępy między elementami hero */
+      
+    }
+  
+    .menu-fixed-container {
+      top: 56px; /* Zmniejszone dla menu mobilnego */
+    }
+  
+    .hero-text-center {
+      font-size: 48px;
+      color: white;
+      text-align: center;
+      text-transform: capitalize;
+    }
+  
+    .hero-text-left {
+      display: none;
+    }
+  
+    .hero-text-right {
+      position: static;
+      bottom: 0;
+      right: 0;
+      font-size: 16px;
+      text-align: center;
+      color: white;
+    }
+  
+    .hero-image {
+      margin-top: 24px; /* Adjust margin for mniejsze ekrany */
+    }
+  
+    .features-container {
+        margin-top: 75px;
+        margin-bottom: 75px;
+    }
+    .features-header {
+        /* Podobna struktura jak w .info-section */
+        margin-top: 0; /* Jeśli chcesz przesunąć w górę/dół */
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        text-align: left;
+        gap: 24px; /* Odstęp między elementami */
+      }
+    
+      .features-header h2 {
+        font-size: 24px; /* Pomniejszamy w stosunku do desktopa */
+      }
+    
+      .features-header p {
+        font-size: 16px;
+        /* Możesz dodać line-height, np. line-height: 1.4; */
+      }
+    /* --- Feature2 --- */
+    .feature2 {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    
+      .feature-content2 {
+        width: 100%;
+        text-align: center;
+        height: auto;
+
+        border-radius: 0px 0px 8px 8px;
+        padding: 16px;
+        justify-content: left;
+
+      }
+    
+      .feature-text2 {
+        width: 100%;
+        gap: 16px;
+      }
+    
+      .feature-image2 {
+        position: static;
+        width: 100%;
+        
+        margin-right: 0px;
+      }
+
+      .feature-image2 img {
+        border-radius: 8px 8px 0px 0px;
+        object-fit: cover;
+      }
+    
+      /* --- Feature --- */
+      .feature {
+        flex-direction: column-reverse;
+        width: 100%;
+        align-items: center;
+        text-align: center;
+      }
+    
+      .feature-content {
+        position:static;
+        width: 100%;
+        text-align: center;
+        height: auto;
+        border-radius: 0px 0px 8px 8px;
+        padding: 16px;
+        justify-content: left;
+      }
+    
+      .feature-text {
+        width: 100%;
+        gap: 16px;
+      }
+    
+      .feature-image {
+        position: static; /* Resetujemy absolute dla mobilnych */
+        width: 100%;
+        
+        margin-left: 0px;
+        
+      }
+      .feature-image img {
+        border-radius: 8px 8px 0px 0px;
+        object-fit: cover;
+      }
+
+      .feature-text2 h3,.feature-text h3{
+        font-size: 20px;
+      }
+      .feature-text2 p,.feature-text p{
+        font-size: 16px;
+      }
+      
+      .service-button, .service-button2 {
+        margin-top: 8px;
+      }
+
+      
+
+      
+
+
+      /* Sekcja informacyjna pod hero */
+.info-section {
+    margin-top: -30px;
+    gap: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    
+  }
+  
+  .info-text {
+    width: 100%;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column; /* Ustawia elementy jeden pod drugim */
+    gap: 24px; /* Ustawia odstęp 32px między elementami wewnątrz */
+  }
+
+  
+  
+  
+  .info-text h2 {
+    font-size: 24px;
+    
+  }
+  
+  .info-text p {
+    
+    font-size:16px;
+    
+    
+  }
+  
+  .green-button {
+    margin-top: 24px;
+  
+  }
+  
+  .green-button:hover {
+    background-color: #17b851;
+  }
+  
+  .info-image {
+    width: 100%;
+    text-align: center; /* Jeśli chcesz wyśrodkować np. zdjęcie w pionie */
+  }
+  
+  .info-image img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    
+  }
+
+
+  /* stopka */
+
+  .site-footer {
+    margin-top: 100px;
+    
+  }
+ 
+  .footer-top {
+    flex-direction: column;
+    gap: 32px;
+    padding: 16px;
+  }
+  .footer-col1,.footer-col {
+    width: 100%;
+    gap: 24px;
+  }
+  .footer-description {
+    font-size: 16px;
+  }
+  .footer-logo {
+    width: 128px;    /* dostosuj w razie potrzeby */
+    height: 64px;
+    object-fit: cover;
+  }
+  .site-footer h3 {
+    font-size: 20px;
+  }
+
+  
+
+  .footer-col ul {
+    margin: -24px 0px -24px 0px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    justify-content: center; /* 2 paragrafy: lewy i prawy */
+    align-items: center;
+    text-align: center;
+    gap: 24px;
+    margin-top: 24px 0px; /* mały odstęp pod .footer-top */
+  }
+  
+  .footer-bottom p {
+    margin: 0;
+  }
+
+
+  }
+  
