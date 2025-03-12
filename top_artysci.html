@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Artyści</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        main {
+            margin-top: 200px;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Menu -->
+    <header>
+        <div id="menu-container"></div>
+        
+    </header>
+
+    <section class="hero-banner">
+        <p class="hero-text-left">🔥 Najlepsi artyści na Spotify</p>
+        <h1 class="hero-text-center">Poznaj 3 najpopularniejszych artystów na Spotify: <span id="update-date">Ładowanie...</span></h1>
+        <p class="hero-text-right">🎸 Dane aktualizowane codziennie 🎶</p>
+    </section>
+    
+
+    <section class="top-artists-section">
+        <div class="top-artist" id="top-artist-2"></div>
+        <div class="top-artist top-main" id="top-artist-1"></div>
+        <div class="top-artist" id="top-artist-3"></div>
+    </section>
+    
+    <div class="features-container">
+        <!-- Nagłówek sekcji -->
+        <div class="features-header">
+            <h2>🎧 Odkryj jeszcze więcej artystów!</h2>
+            <p>
+                Muzyka nie zna granic! 🎶 Sprawdź pełną listę artystów i zobacz, kto podbija Spotify. Sortuj według liczby słuchaczy lub trendów, aby znaleźć najpopularniejszych wykonawców lub tych, którzy właśnie zyskują na popularności. Twój nowy ulubiony artysta może być na wyciągnięcie ręki! 🚀
+            </p>
+        </div>
+
+        <div class="artist-list-container">
+            <div class="controls">
+                <span>Sortuj według</span>
+                <div class="inside-buttons">
+                    <button id="sort-listeners" class="sort-button active">Liczba słuchaczy</button>
+                    <button id="sort-trend" class="sort-button">Trend</button>
+                </div>
+            </div>
+            
+            <table id="artists-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Artysta</th>
+                        <th>Liczba słuchaczy</th>
+                        <th>Trend</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Artyści zostaną załadowani dynamicznie -->
+                </tbody>
+            </table>
+            <button id="load-more" class="green-button" style="margin-top: 8px;">Załaduj kolejych 10 artystów</button>
+            
+
+        </div>
+    
+        
+        
+
+    </div>
+    
+    <main>
+        
+        
+        
+        
+        
+        
+    </main>
+    
+    <!-- Stopka -->
+    <footer>
+        <div id="footer-container"></div>
+        
+    </footer>
+    <!-- Dodaj przed `menu.js` -->
+    <script src="js/script.js" defer></script>
+    <script src="js/menu.js" defer></script>
+    <script src="js/footer.js" defer></script>
+    <script src="js/spotifyAPI.js"></script>
+    <script src="js/topartist.js" defer></script>
+</body>
+</html>

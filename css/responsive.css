@@ -376,3 +376,37 @@
 
   }
   
+  
+@media(max-width: 1024px){
+  .top-artists-section {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  
+  }
+  .top-main {
+    background-color: #262626;
+     /* Trochę większy, żeby się wyróżniał */
+    margin-top: 0;
+    width: 75%;
+    
+    order: -1;
+    
+  }
+  
+  /* Top 2 (lewa strona) */
+  #top-artist-2 {
+     /* Move to the first position */
+    margin-top: 0;
+    width: 40%;
+    flex-grow: 1; /* Allow to grow */
+  }
+  
+  /* Top 3 (prawa strona) */
+  #top-artist-3 {
+    margin-top: 0;
+    width: 40%;
+    flex-grow: 1; /* Allow to grow */
+    
+  }
+}

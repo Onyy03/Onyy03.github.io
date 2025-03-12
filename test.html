@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Testowa podstrona Spotify</title>
+    <script src="js/spotifyAPI.js"></script>
+</head>
+<body>
+    <h1>Podstrona Spotify</h1>
+    <div id="profile-info">Ładowanie danych...</div>
+    <button id="check-artist">Sprawdź dane artysty</button>
+    <div id="artist-info"></div>
+    <button id="load-top50-global">Załaduj Top 50 Global</button>
+    <button id="load-top50-usa">Załaduj Top 50 USA</button>
+    <button id="load-top50-poland">Załaduj Top 50 Polska</button>
+    <div id="playlist-info"></div>
+
+    <script>
+        document.getElementById('load-top50-global').addEventListener('click', () => {
+            const token = localStorage.getItem('spotify_token');
+            if (!token) {
+                alert('Brak tokenu, zaloguj się ponownie!');
+                return;
+            }
+            getTop50Playlist(token, '37i9dQZEVXbMDoHDwVN2tF'); // Global
+        });
+
+        document.getElementById('load-top50-usa').addEventListener('click', () => {
+            const token = localStorage.getItem('spotify_token');
+            if (!token) {
+                alert('Brak tokenu, zaloguj się ponownie!');
+                return;
+            }
+            getTop50Playlist(token, '37i9dQZEVXbLRQDuF5jeBp'); // USA
+        });
+
+        document.getElementById('load-top50-poland').addEventListener('click', () => {
+            const token = localStorage.getItem('spotify_token');
+            if (!token) {
+                alert('Brak tokenu, zaloguj się ponownie!');
+                return;
+            }
+            getTop50Playlist(token, '37i9dQZEVXbN6itCcaL3Tt'); // Polska
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userData = JSON.parse(localStorage.getItem('spotify_user'));
+
+            if (userData) {
+                document.getElementById('profile-info').innerHTML = `
+                    <h2>Witaj, ${userData.display_name}!</h2>
+                    <p><strong>Email:</strong> ${userData.email}</p>
+                    <img src="${userData.images[0]?.url || ''}" alt="Avatar" width="200">
+                    <p>Kraj: ${userData.country}</p>
+                `;
+            } else {
+                document.body.innerHTML = '<p>Brak danych użytkownika. <a href="button.html">Zaloguj się ponownie</a>.</p>';
+            }
+
+            document.getElementById('check-artist').addEventListener('click', testSpotifyAPI);
+        });
+    </script>
+
+    
+
+    
+</body>
+</html>
